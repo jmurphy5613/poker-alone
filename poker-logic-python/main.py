@@ -1,15 +1,27 @@
 from Game import Game
-from treys import Card, Evaluator
+from treys import Card, Deck, Evaluator
 import os
 
-game = Game(1000, 25, 50, ["jimmy", "john", "jack"])
+game = Game(1000, 50, 25, ["jimmy", "john", "jack", "jill", "natalie"])
 game.deck.shuffle()
-print(game.deck)
-# print(game)
-# os.system('clear')
-# game.collectBets()
-# game.deal()
-# print(game)
+game.collectBets()
+game.deal()
+game.moveBlinds()
+game.moveBlinds()
+print(game)
+game.moveBlinds()
+print(game)
+print(game.players[game.startingPosition(isPreflop=True)])
+game.flop()
+print(game)
+print(game.players[game.startingPosition(isPreflop=False)])
+
+
+
+# deck = Deck()
+# hand = []
+# hand.append(deck.draw(2))
+# Card.print_pretty_cards(hand) 
 
 # evaluator = Evaluator()
 

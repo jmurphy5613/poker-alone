@@ -9,3 +9,9 @@ class Player:
     def bet(self, amount):
         self.stack_size -= amount
         return amount
+    
+    def fold(self):
+        self.hand = []
+    
+    def __str__(self):
+        return f"{self.name} {self.stack_size}"
