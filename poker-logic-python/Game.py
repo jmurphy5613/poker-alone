@@ -1,6 +1,7 @@
 from treys import Deck, Card, Evaluator
 from Player import Player
 import random
+from Preflop import evaluateStarting
 
 class Game:
 
@@ -12,8 +13,6 @@ class Game:
     board = []
     pot = 0
     is_preflop = True
-
-    evaluator = Evaluator()
 
     def __init__(self, stack_size, bb, sb, names):
         for name in names:
@@ -90,19 +89,35 @@ class Game:
 
         # Postflop Strategy:
 
-        # betting range
-        # if the current bet is 0 and the player has a hand in the top 20% of hands, 3bet
+        # betting/raising range
+        # if the current bet is 0 and the player has a hand in the top 20% of hands, bet 5x the big blind
+        # if the current bet is not 0 and the player has a hand in the top 20% of hands, raise 3x the current bet
 
         # calling range
-        # if the current bet is 0 and the player has a hand in the top 30% of hands, call
+        # if the current bet is <= a quarter of that players stack and the player has a hand in the top 30% of hands, call
+        # if the current bet is <= half of that players stack and the player has a hand in the top 20% of hands, call
 
         # checking range
-        
+        # check if none of the calling/rasing conditions are met
+
+        # folding range
+        # fold if the calling range is not met
+
+        # bluffing range
+        # bluff some percentage of the time
+
+        evaluator = Evaluator()
+
+        print(self.board, self.players[self.current_turn].hand)
 
         current_player = self.players[self.current_turn]
-        hand_rank = self.evaluator.evaluate(self.board, current_player.hand)
-        hand_rank_percentage = self.evaluator.get_five_card_rank_percentage(hand_rank)
+        hand_rank = evaluator.evaluate(self.board, current_player.hand)
+        hand_rank_percentage = evaluator.get_five_card_rank_percentage(hand_rank)
+        
         if(self.is_preflop):
+
+            hand_rank_percentage = evaluateStarting(current_player.hand)
+
             if(hand_rank_percentage < 0.7):
                 current_player.fold()
                 return
@@ -113,6 +128,28 @@ class Game:
                 current_player.bet(self.current_bet)
                 return
         else:
+            if(self.current_bet == 0):
+                if(hand_rank_percentage > 0.8):
+                    bet_size = min(current_player.stack_size, self.current_big_blind * 5)
+                    self.pot += current_player.bet(bet_size)
+                    return
+                else:
+                    return
+            elif(hand_rank_percentage > 0.85):
+                bet_size = min(current_player.stack_size, self.current_bet * 3)
+                self.pot += current_player.bet(bet_size)
+                return
+            elif(self.current_bet <= current_player.stack_size / 4 and hand_rank_percentage > 0.7):
+                bet_size = min(current_player.stack_size, self.current_bet)
+                self.pot += current_player.bet(bet_size)
+                return
+            elif(self.current_bet <= current_player.stack_size / 2 and hand_rank_percentage > 0.8):
+                bet_size = min(current_player.stack_size, self.current_bet)
+                self.pot += current_player.bet(bet_size)
+                return
+            else:
+                current_player.fold()
+                return
             
 
 

@@ -1,22 +1,13 @@
 from Game import Game
 from treys import Card, Deck, Evaluator
-import os
+from Preflop import evaluateStarting
 
-game = Game(1000, 50, 25, ["jimmy", "john", "jack", "jill", "natalie"])
-game.deck.shuffle()
-game.collectBets()
-game.deal()
-game.moveBlinds()
-game.moveBlinds()
-print(game)
-game.moveBlinds()
-print(game)
-print(game.players[game.startingPosition(isPreflop=True)])
-game.flop()
-print(game)
-print(game.players[game.startingPosition(isPreflop=False)])
-
-
+# game = Game(1000, 50, 25, ["jimmy", "john", "jack", "jill", "natalie"])
+# game.deck.shuffle()
+# game.collectBets()
+# game.deal()
+# game.playerDoSomething()
+# print(game)
 
 # deck = Deck()
 # hand = []
@@ -26,9 +17,9 @@ print(game.players[game.startingPosition(isPreflop=False)])
 # evaluator = Evaluator()
 
 # board = [
-#     Card.new('Ah'),
-#     Card.new('Kd'),
-#     Card.new('Jc')
+#     # Card.new('Ah'),
+#     # Card.new('Kd'),
+#     # Card.new('Jc')
 # ]
 
 # hand = [
@@ -36,5 +27,7 @@ print(game.players[game.startingPosition(isPreflop=False)])
 #    Card.new('Th')
 # ]
 
+# print(evaluateStarting(hand))
+
 # Card.print_pretty_cards(board + hand)
-# print(evaluator.evaluate(board, hand))
+# print(evaluator.evaluate(hand))
